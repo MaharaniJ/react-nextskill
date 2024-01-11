@@ -1,0 +1,21 @@
+  <div className="flex flex-row justify-around items-center h-50 bg-white-400 relative">
+      <div>Welcome to our Store!</div>
+      <div className="flex flex-row gap-5  h-auto ">
+
+        
+      <Demo />
+        {/* <div>Demo</div> */}
+        <div>Shop</div>
+        <div>Product</div>
+        <div><span className="font-bold text-lg">Kalles</span></div>
+        <div>Sale</div>
+        <div>Lookbook</div>
+        <div>Blog</div> 
+      </div>
+      <div className="flex flex-row gap-8">
+        <i className="bi bi-search  hover:text-blue-200">search</i>
+        <i className="bi bi-person  hover:text-blue-200">Person</i>
+        <i className="bi bi-suit-heart  hover:text-blue-200">Heart</i>
+        <i className="bi bi-cart  hover:text-blue-200">Cart</i>
+      </div>
+    </div>
