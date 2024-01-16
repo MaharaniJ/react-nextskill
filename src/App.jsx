@@ -1,40 +1,31 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
+import Mycart from "./components/Cart-section/Mycart";
 
-import Header from "./components/Header";
-import Navbar from "./components/Nav/Navbar";
-import Cart from "./components/Cart";
-import Banner from "./components/Nav/Banner";
-import Footer from "./components/Footer";
-import Nav from "./components/Nav/Nav";
-import Layout from "./components/Layout";
-import DealoftheDay from "./components/DealoftheDay";
-import Mycart from "./components/Mycart";
+import Viewcart from "./components/Cart-section/Viewcart";
+import Checkout from "./components/Checkout/Checkout";
+import { Outlet, Route, Routes } from "react-router-dom";
 
-import Viewcart from "./components/Viewcart";
-import Checkout from "./components/Checkout";
-import { Route, Routes } from "react-router-dom";
+import Index from "./components/Homepage";
+import SignIn from "./components/signin-up/SignIn";
+import SignUp from "./components/signin-up/SignUp";
 
 function App() {
   return (
     <>
-      <Routes>
-        <Route path="/viewcart/:id" element={<Viewcart />} />
-        <Route path="/addtocart" element={<Mycart />} />
-        <Route path="/checkout" element={<Checkout />} />
-      </Routes>
       <div className="w-full">
-        <Header />
-        <Nav />
-        <Navbar />
-        <Banner />
-        <Layout />
-        <Cart />
+        {/* <Outlet /> */}
+
+        {/* Define your routes */}
+        <Routes>
+          <Route path="/" element={<Index />} />
+          <Route path="/viewcart/:id" element={<Viewcart />} />
+          <Route path="/addtocart/:id" element={<Mycart />} />
+          <Route path="/checkout/:id" element={<Checkout />} />
+          <Route path="/login" element={<SignIn />} />
+          <Route  path="/register" element={<SignUp />} />
+          {/* Add more routes as needed */}
+        </Routes>
 
         {/* <DealoftheDay /> */}
-
-        <Footer />
       </div>
     </>
   );

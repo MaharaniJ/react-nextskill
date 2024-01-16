@@ -1,9 +1,11 @@
 import { Link, NavLink } from "react-router-dom";
-import cart from "./data";
+import cart from "../data";
 import { useState } from "react";
+import Mycart from "../Cart-section/Mycart";
 
 function Cart() {
-  return (
+
+return (
     <div className="bg-white">
       <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
         <h2 className="sr-only">Products</h2>
@@ -49,14 +51,15 @@ function Cart() {
               {/* Buttons at the top initially */}
               <div className="absolute inset-0 gap-5 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                 <div className="transform group-hover:translate-y-10 transition-transform">
-                  <button className="bg-slate-400 text-black px-4 py-2 rounded-full mx-2 ">
-                    <NavLink to="/viewcart"> Quick View </NavLink>
+                  <button className="bg-slate-400 text-black px-4 py-2 rounded-full mx-2 " >
+                    <Link to={`/viewcart/${item.cart_id}`}> Quick View </Link>
                   </button>
                 </div>
                 <div className="transform group-hover:translate-y-10 transition-transform">
-                  <button className="bg-green-500 text-white px-4 py-2 rounded-full mx-2 ">
-                    <NavLink to="/addtocart">Add to Cart</NavLink>
+                  <button className="bg-green-500 text-white px-4 py-2 rounded-full mx-2 " >
+                    <Link to={`/addtocart/${item.cart_id}`} >Add to Cart</Link>
                   </button>
+                  
                 </div>
               </div>
             </div>
