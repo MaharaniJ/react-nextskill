@@ -121,6 +121,25 @@ function SignUp() {
           />
         </div>
       </div>
+      <div className="w-full">
+        <label
+          htmlFor="cpassword"
+          className="block text-lg font-medium leading-6 text-gray-900"
+        >
+         Conform Password
+        </label>
+        <div className="mt-2">
+          <input
+            id="cpassword"
+            name="cpassword"
+            value={Signupinput.password}
+            onChange={handleChange}
+            type="password"
+            autoComplete="cpassword"
+            className="block w-full  px-4 rounded-md border-0 py-4 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+          />
+        </div>
+      </div>
       <button className="bg-blue-400 rounded-md p-3 text-xl">Submit</button>
       <div className="flex gap-3 text-lg">
         <p>Already Have Account? </p>
