@@ -1,5 +1,8 @@
-const carddatas = [];
-export const getCardReducer = (state = { carddatas }, action) => {
+const initialState = {
+  carddatas: [],
+};
+
+export const getCardReducer = (state = initialState, action) => {
   switch (action.type) {
     case "SUCCESS_GET_CARDDATAS":
       return { carddatas: action.payload };
@@ -9,3 +12,5 @@ export const getCardReducer = (state = { carddatas }, action) => {
       return state;
   }
 };
+
+

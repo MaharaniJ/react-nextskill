@@ -4,9 +4,68 @@ import { useEffect } from "react";
 import cart from "../data";
 import { useState } from "react";
 import Totalamount from "./Totalamount";
+import axios from "axios";
+import { useContext } from "react";
+import { LoginContext } from "../../context/ContextProvider";
+
 
 function Mycart() {
   const [count, setCount] = useState(1);
+  const {id} = useParams("")
+  const { account, setAccount } = useContext(LoginContext);
+
+  
+const [getdata, setGetdata] = useState([]);
+
+  const getaproductdata = async () => {
+    try {
+      const res = await axios.get(`http://localhost:5000/getproduct/${id}`, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = res.data;
+      console.log(data);
+      if (res.status !== 201) {
+        alert("no data available");
+      } else {
+        setGetdata(data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    setTimeout(getdata, 1000);
+  }, [id]);
+
+  const addtocart = async (id) => {
+    const token = window.localStorage.getItem("app-token");
+    try {
+      const response = await axios.post(
+        `http://localhost:5000/addtocart/${id}`,
+        getaproductdata,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      const resdata = response.data;
+      console.log(resdata);
+      if (resdata.status === 401 || !resdata) {
+        alert("user Invalid");
+      } else {
+        setAccount(resdata);
+        history("/checkout");
+        alert("data added in your cart");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
 
   const handleIncrement = () => {
     setCount(count + 1);
@@ -19,7 +78,7 @@ function Mycart() {
   };
   const [getaData, setGetaData] = useState([]);
   
-  const { id } = useParams();
+  
 
   // useEffect((newitem)=>{
   //   setGetaData((prevItem)=>[...prevItem,newitem])
@@ -55,15 +114,15 @@ function Mycart() {
   //   );
   // };
 
-  useEffect(() => {
-    // Find the item in the cart data with the matching id
-    const selectedItem = cart.find((item) => item.cart_id === Number(id));
+  // useEffect(() => {
+  //   // Find the item in the cart data with the matching id
+  //   const selectedItem = cart.find((item) => item.cart_id === Number(id));
 
-    // If the item is found, update the state
-    if (selectedItem) {
-      setGetaData(selectedItem);
-    }
-  }, [id]);
+  //   // If the item is found, update the state
+  //   if (selectedItem) {
+  //     setGetaData(selectedItem);
+  //   }
+  // }, [id]);
 
   return (
     <div className="flex items-center justify-center h-screen bg-slate-400">

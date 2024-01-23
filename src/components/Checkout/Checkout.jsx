@@ -1,7 +1,105 @@
+import axios from "axios";
+import { useState } from "react";
+
 export default function Checkout() {
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    companyName: "",
+    country: "",
+    streetAddress: "",
+    region: "",
+    postalCode: "",
+  });
+
+  const {
+    firstName,
+    lastName,
+    email,
+    companyName,
+    country,
+    streetAddress,
+    region,
+    postalCode,
+  } = formData;
+
+  if (
+    !firstName ||
+    !lastName ||
+    !email ||
+    !companyName ||
+    !country ||
+    !streetAddress ||
+    !region ||
+    !postalCode
+  ) {
+    console.log("Please Enter the required fields");
+  }
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({ ...prevData, [name]: value }));
+  };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/checkout",
+        formData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        // Clear the form data
+        setFormData({
+          ...formData,
+          firstName: "",
+          lastName: "",
+          email: "",
+          companyName: "",
+          country: "",
+          streetAddress: "",
+          city: "",
+          region: "",
+          postalCode: "",
+        });
+        console.log("Form data saved successfully");
+        // Exit editing mode
+      } else {
+        console.error("Failed to save form data");
+      }
+    } catch (error) {
+      console.error("Error while saving form data:", error.message);
+    }
+  };
+
+  const handleCancel = () => {
+    // Reset the form data and exit editing mode
+    setFormData({
+      firstName: "",
+      lastName: "",
+      email: "",
+      companyName: "",
+      country: "",
+      streetAddress: "",
+      city: "",
+      region: "",
+      postalCode: "",
+    });
+  };
+
   return (
     <>
-      <form className="mx-20 flex flex-col justify-center items-center mt-4 bg-slate-200 p-8 shadow-lg rounded-lg">
+      <form
+        className="mx-20 flex flex-col justify-center items-center mt-4 bg-slate-200 p-8 shadow-lg rounded-lg"
+        onSubmit={handleSubmit}
+      >
         <div className="space-y-12">
           <div className="border-b border-gray-900/10 pb-12">
             <h1 className="text-base font-bold leading-10 text-gray-900 mb-4 px-7">
@@ -18,10 +116,11 @@ export default function Checkout() {
               <div className="mt-2">
                 <input
                   id="first-name"
-                  name="first-name"
+                  name="firstName"
                   type="text"
                   autoComplete="first-name"
                   className="block w-full p-7 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  onChange={handleInputChange}
                 />
               </div>
             </div>
@@ -35,10 +134,11 @@ export default function Checkout() {
               <div className="mt-2">
                 <input
                   id="last-name"
-                  name="last-name"
-                  type="last-name"
+                  name="lastName"
+                  type="text"
                   autoComplete="last-name"
                   className="block w-full p-7 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  onChange={handleInputChange}
                 />
               </div>
             </div>
@@ -56,6 +156,7 @@ export default function Checkout() {
                   type="email"
                   autoComplete="email"
                   className="block w-full p-7 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  onChange={handleInputChange}
                 />
               </div>
             </div>
@@ -69,10 +170,11 @@ export default function Checkout() {
               <div className="mt-2">
                 <input
                   id="Company-name"
-                  name="Company-name"
-                  type="Company-name"
+                  name="companyName"
+                  type="text"
                   autoComplete="Company-name"
                   className="block w-full p-7 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  onChange={handleInputChange}
                 />
               </div>
             </div>
@@ -91,10 +193,12 @@ export default function Checkout() {
                     name="country"
                     autoComplete="country-name"
                     className="block w-full p-7 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
+                    onChange={handleInputChange}
                   >
                     <option>United States</option>
                     <option>Canada</option>
                     <option>Mexico</option>
+                    <option>India</option>
                   </select>
                 </div>
               </div>
@@ -109,10 +213,11 @@ export default function Checkout() {
                 <div className="mt-2">
                   <input
                     type="text"
-                    name="street-address"
+                    name="streetAddress"
                     id="street-address"
                     autoComplete="street-address"
                     className="block w-full p-7 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                    onChange={handleInputChange}
                   />
                 </div>
               </div>
@@ -131,6 +236,7 @@ export default function Checkout() {
                     id="city"
                     autoComplete="address-level2"
                     className="block w-full p-7 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                    onChange={handleInputChange}
                   />
                 </div>
               </div>
@@ -149,6 +255,7 @@ export default function Checkout() {
                     id="region"
                     autoComplete="address-level1"
                     className="block w-full p-7 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                    onChange={handleInputChange}
                   />
                 </div>
               </div>
@@ -163,10 +270,11 @@ export default function Checkout() {
                 <div className="mt-2">
                   <input
                     type="text"
-                    name="postal-code"
+                    name="postalCode"
                     id="postal-code"
                     autoComplete="postal-code"
                     className="block w-full p-7 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                    onChange={handleInputChange}
                   />
                 </div>
               </div>
@@ -177,6 +285,7 @@ export default function Checkout() {
           <button
             type="button"
             className="text-sm font-semibold leading-6 text-gray-900"
+            onClick={handleCancel}
           >
             Cancel
           </button>

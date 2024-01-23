@@ -1,18 +1,35 @@
 import { Link, NavLink } from "react-router-dom";
 import cart from "../data";
-import { useState } from "react";
+import { useEffect } from "react";
 import Mycart from "../Cart-section/Mycart";
+import { getProducts } from "../../../redux/action/action";
+import { useDispatch, useSelector } from "react-redux";
+
+
 
 function Cart() {
+  const { carddatas } = useSelector((state) => state.getCardData);
+  const dispatch = useDispatch();
+  console.log(carddatas);
 
-return (
+  useEffect(() => {
+    // console.log(getProducts)
+    dispatch(getProducts());
+  }, [dispatch]);
+
+  // Check if products is undefined or null
+  if (!carddatas) {
+    return <div>Loading...</div>; // You can customize the loading state
+  }
+
+  return (
     <div className="bg-white">
       <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
         <h2 className="sr-only">Products</h2>
 
         <div className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
-          {cart.map((item) => (
-            <div key={item.cart_id} className="relative group">
+          {carddatas.map((item) => (
+            <div key={item.id} className="relative group">
               <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-lg bg-gray-200 xl:aspect-h-8 xl:aspect-w-7">
                 <img
                   src={item.imagSrc}
@@ -51,15 +68,14 @@ return (
               {/* Buttons at the top initially */}
               <div className="absolute inset-0 gap-5 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                 <div className="transform group-hover:translate-y-10 transition-transform">
-                  <button className="bg-slate-400 text-black px-4 py-2 rounded-full mx-2 " >
-                    <Link to={`/viewcart/${item.cart_id}`}> Quick View </Link>
+                  <button className="bg-slate-400 text-black px-4 py-2 rounded-full mx-2 ">
+                    <Link to={`/viewcart/${item.id}`}> Quick View </Link>
                   </button>
                 </div>
                 <div className="transform group-hover:translate-y-10 transition-transform">
-                  <button className="bg-green-500 text-white px-4 py-2 rounded-full mx-2 " >
-                    <Link to={`/addtocart/${item.cart_id}`} >Add to Cart</Link>
+                  <button className="bg-green-500 text-white px-4 py-2 rounded-full mx-2 ">
+                    <Link to={`/addtocart/${item.id}`}>Add to Cart</Link>
                   </button>
-                  
                 </div>
               </div>
             </div>

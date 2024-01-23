@@ -19,3 +19,36 @@
         <i className="bi bi-cart  hover:text-blue-200">Cart</i>
       </div>
     </div>
+
+
+
+
+     // const userData = {
+    //   firstname: Signupinput.firstname,
+    //   lastname: Signupinput.lastname,
+    //   email: Signupinput.email,
+    //   password: Signupinput.password,
+    // };
+    localStorage.setItem("userData", JSON.stringify(Signupinput));
+
+
+    // Clear input fields
+    setSignupinput({
+      firstname: "",
+      lastname: "",
+      email: "",
+      password: "",
+    });
+___________________________________________________
+
+ const storedUser = JSON.parse(localStorage.getItem("userData"));
+
+    if (storedUser && storedUser.email === loginData.email && storedUser.password === loginData.password) {
+      // Login successful
+      
+      navigate("/")
+      alert("Login successful!");
+    } else {
+      // Login failed
+      alert("Invalid email or password. Please try again.");
+    }

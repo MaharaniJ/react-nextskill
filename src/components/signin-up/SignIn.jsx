@@ -1,15 +1,16 @@
+import axios from "axios";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 function SignIn() {
-    const navigate = useNavigate()
+  const navigate = useNavigate();
   const [loginData, setLogindata] = useState({
     email: "",
     password: "",
   });
- 
-  const handleData = (e)=>{
-    e.preventDefault()
+
+  const handleData = (e) => {
+    e.preventDefault();
     const { name, value } = e.target;
     setLogindata((pre) => {
       return {
@@ -17,29 +18,61 @@ function SignIn() {
         [name]: value,
       };
     });
+  };
 
-  }
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const { email, password } = loginData;
+    const token = window.localStorage.getItem("app-token");
 
-  const handleSubmit = (e)=>{
-    e.preventDefault()
-    const storedUser = JSON.parse(localStorage.getItem("userData"));
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/login",
+        {
+          email,
+          password,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
-    if (storedUser && storedUser.email === loginData.email && storedUser.password === loginData.password) {
-      // Login successful
-      setLogindata({
-        email:"",
-        password:""
-      })
-      navigate("/")
-      alert("Login successful!");
-    } else {
-      // Login failed
-      alert("Invalid email or password. Please try again.");
+      // Check the HTTP status code for success
+      if (response.status === 200) {
+        const logindata = response.data;
+        console.log(logindata);
+
+        // Check the status property in the response data
+        if (logindata.status === "success") {
+          alert("Login successful");
+          setLogindata({
+            ...loginData,
+            email: "",
+            password: "",
+          });
+          navigate("/");
+        } else {
+          // Handle unsuccessful login
+          alert("Login failed");
+        }
+      } else {
+        // Handle non-200 status codes
+        alert("Login failed");
+      }
+    } catch (error) {
+      console.log("Error in login:", error);
+      alert("Login failed");
     }
-  }
+  };
+
   return (
-    <form className="mx-auto flex flex-col justify-center items-center mt-20 bg-slate-200 w-1/3 p-8 gap-5 shadow-lg rounded-md" onSubmit={handleSubmit} >
-        <h1 className="text-xl font-sm">Sign In</h1>
+    <form
+      className="mx-auto flex flex-col justify-center items-center mt-20 bg-slate-200 w-1/3 p-8 gap-5 shadow-lg rounded-md"
+      onSubmit={handleSubmit}
+    >
+      <h1 className="text-xl font-sm">Sign In</h1>
       <div className="w-full">
         <label
           htmlFor="email"
@@ -79,12 +112,14 @@ function SignIn() {
         </div>
       </div>
       <button className="bg-blue-400 rounded-md p-3">Submit</button>
-     <div className="flex gap-3">
-     <p>New User? </p>
-     <Link to="/register">
-     <button className="cursor-pointer hover:text-blue-500">Create Account!</button>
-     </Link>
-     </div>
+      <div className="flex gap-3">
+        <p>New User? </p>
+        <Link to="/register">
+          <button className="cursor-pointer hover:text-blue-500">
+            Create Account!
+          </button>
+        </Link>
+      </div>
     </form>
   );
 }

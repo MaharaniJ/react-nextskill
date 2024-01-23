@@ -3,10 +3,40 @@ import { useParams } from "react-router";
 import cart from "../data"; // Import your cart data
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
+import { useContext } from "react";
+import { LoginContext } from "../../context/ContextProvider";
+import axios from "axios";
 
 function Viewcart() {
   const [getaData, setGetaData] = useState("");
-  const { id } = useParams();
+
+  const { id } = useParams("");
+  const { account, setAccount } = useContext(LoginContext);
+
+  const [getdata, setGetdata] = useState([]);
+
+  const getaproductdata = async () => {
+    try {
+      const res = await axios.get(`http://localhost:5000/getproduct/${id}`, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = res.data;
+      console.log(data);
+      if (res.status !== 201) {
+        alert("no data available");
+      } else {
+        setGetdata(data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    setTimeout(getaproductdata, 1000);
+  }, [id]);
 
   useEffect(() => {
     // Find the item in the cart data with the matching id
@@ -67,7 +97,7 @@ function Viewcart() {
                     +
                   </span>
                 </button>
-                <Link to={`/addtocart/${getaData.cart_id}`}>
+                <Link to={`/addtocart/${getaData.id}`}>
                   <button className="cart_btn2 px-5 py-2 bg-orange-500 rounded-full text-gray-800 font-bold focus:outline-none shadow-md">
                     ADD TO CART
                   </button>

@@ -1,3 +1,4 @@
+import axios from "axios";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
@@ -7,6 +8,7 @@ function SignUp() {
     lastname: "",
     email: "",
     password: "",
+    cpassword: "",
   });
 
   const handleChange = (e) => {
@@ -19,26 +21,39 @@ function SignUp() {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // const userData = {
-    //   firstname: Signupinput.firstname,
-    //   lastname: Signupinput.lastname,
-    //   email: Signupinput.email,
-    //   password: Signupinput.password,
-    // };
-    localStorage.setItem("userData", JSON.stringify(Signupinput));
+    const { firstname, lastname, email, password, cpassword } = Signupinput;
+    try {
+      const response = await axios.post("http://localhost:5000/register", {
+        firstname,
+        lastname,
+        email,
+        password,
+        cpassword,
+      });
+      const data = response.data;
+      console.log(response.data);
+      if (response.status === 422 || !data) {
+        alert("Invalid credentials");
+      }
+      else{
+        alert("user successfully registered");
+        setSignupinput({
+          ...Signupinput,
+          firstname:"",
+          lastname:"",
+          email:"",
+          password:"",
+          cpassword:"",
 
-
-    // Clear input fields
-    setSignupinput({
-      firstname: "",
-      lastname: "",
-      email: "",
-      password: "",
-    });
-    alert("User data saved successfully!");
+        })
+      }
+    } catch (error) {
+      console.error("Error in sending Data:", error);
+    }
   };
+
   return (
     <form
       className="mx-auto flex flex-col justify-center items-center mt-20 bg-slate-200 w-1/3 p-8 gap-5 shadow-lg rounded-md"
@@ -126,13 +141,13 @@ function SignUp() {
           htmlFor="cpassword"
           className="block text-lg font-medium leading-6 text-gray-900"
         >
-         Conform Password
+          Conform Password
         </label>
         <div className="mt-2">
           <input
             id="cpassword"
             name="cpassword"
-            value={Signupinput.password}
+            value={Signupinput.cpassword}
             onChange={handleChange}
             type="password"
             autoComplete="cpassword"
