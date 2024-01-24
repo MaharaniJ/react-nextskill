@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 function SignUp() {
   const [Signupinput, setSignupinput] = useState({
@@ -11,6 +12,7 @@ function SignUp() {
     cpassword: "",
   });
 
+  const navigate = useNavigate();
   const handleChange = (e) => {
     const { name, value } = e.target;
     setSignupinput((prev) => {
@@ -23,7 +25,17 @@ function SignUp() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     const { firstname, lastname, email, password, cpassword } = Signupinput;
+
+    console.log("Data being sent:", {
+      firstname,
+      lastname,
+      email,
+      password,
+      cpassword,
+    });
+
     try {
       const response = await axios.post("http://localhost:5000/register", {
         firstname,
@@ -32,25 +44,36 @@ function SignUp() {
         password,
         cpassword,
       });
+
       const data = response.data;
-      console.log(response.data);
-      if (response.status === 422 || !data) {
-        alert("Invalid credentials");
-      }
-      else{
-        alert("user successfully registered");
+
+      if (response.status === 200) {
+        // Successful registration
         setSignupinput({
           ...Signupinput,
-          firstname:"",
-          lastname:"",
-          email:"",
-          password:"",
-          cpassword:"",
-
-        })
+          firstname: "",
+          lastname: "",
+          email: "",
+          password: "",
+          cpassword: "",
+        });
+        toast.success("Registration Successfully done 😃!", {
+          position: "top-center",
+        });
+        setTimeout(() => {
+          navigate("/"); // Navigate to the main page
+        }, 1000);
+      } else {
+        // Handle other HTTP statuses (422, etc.)
+        toast.error(data.error || "Registration failed. Please try again.", {
+          position: "top-right",
+        });
       }
     } catch (error) {
-      console.error("Error in sending Data:", error);
+      console.error("Error sending data:", error);
+      toast.error("Registration failed. Please try again.", {
+        position: "top-right",
+      });
     }
   };
 
@@ -73,7 +96,7 @@ function SignUp() {
             name="firstname"
             value={Signupinput.firstname}
             onChange={handleChange}
-            type="firstname"
+            type="text"
             autoComplete="firstname"
             className="block w-full  px-4 rounded-md border-0 py-4 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
           />
@@ -92,7 +115,7 @@ function SignUp() {
             name="lastname"
             value={Signupinput.lastname}
             onChange={handleChange}
-            type="lastname"
+            type="text"
             autoComplete="lastname"
             className="block w-full px-4 rounded-md border-0 py-4 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
           />

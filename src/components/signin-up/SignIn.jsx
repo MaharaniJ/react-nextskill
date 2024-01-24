@@ -1,6 +1,9 @@
 import axios from "axios";
+import { useContext } from "react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { LoginContext } from "../../context/ContextProvider";
+import { toast } from "react-toastify";
 
 function SignIn() {
   const navigate = useNavigate();
@@ -8,6 +11,9 @@ function SignIn() {
     email: "",
     password: "",
   });
+
+  const { account, setAccount } = useContext(LoginContext);
+  console.log(account);
 
   const handleData = (e) => {
     e.preventDefault();
@@ -38,28 +44,25 @@ function SignIn() {
           },
         }
       );
+      const data = response.data;
+      console.log("Server Response:", data);
 
       // Check the HTTP status code for success
       if (response.status === 200) {
-        const logindata = response.data;
-        console.log(logindata);
+        console.log("Login successful. Token:", data.token); // Log the token
+        setAccount(data);
+        setLogindata({ ...loginData, email: "", password: "" });
+        toast.success("Login Successfully done 😃!", {
+          position: "top-center",
+        });
+        setTimeout(() => {
+          navigate("/"); // Navigate to the main page
+        }, 1000);
 
-        // Check the status property in the response data
-        if (logindata.status === "success") {
-          alert("Login successful");
-          setLogindata({
-            ...loginData,
-            email: "",
-            password: "",
-          });
-          navigate("/");
-        } else {
-          // Handle unsuccessful login
-          alert("Login failed");
+        if (data.token) {
+          window.localStorage.setItem("app-token", data.token);
+          console.log("Token stored in local storage.");
         }
-      } else {
-        // Handle non-200 status codes
-        alert("Login failed");
       }
     } catch (error) {
       console.log("Error in login:", error);

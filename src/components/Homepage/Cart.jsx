@@ -1,8 +1,8 @@
 import { Link, NavLink } from "react-router-dom";
 import cart from "../data";
 import { useEffect } from "react";
-import Mycart from "../Cart-section/Mycart";
-import { getProducts } from "../../../redux/action/action";
+import Addtocart from "../Cart-section/Addtocart";
+import { getProducts } from "../../redux/action/action";
 import { useDispatch, useSelector } from "react-redux";
 
 

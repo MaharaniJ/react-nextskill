@@ -1,12 +1,14 @@
-import Mycart from "./components/Cart-section/Mycart";
+
 
 import Viewcart from "./components/Cart-section/Viewcart";
 import Checkout from "./components/Checkout/Checkout";
 import { Outlet, Route, Routes } from "react-router-dom";
-
+import "bootstrap-icons/font/bootstrap-icons.css";
 import Index from "./components/Homepage";
 import SignIn from "./components/signin-up/SignIn";
 import SignUp from "./components/signin-up/SignUp";
+import Buynow from "./buynow/Buynow";
+import Addtocart from "./components/Cart-section/Addtocart";
 
 function App() {
   return (
@@ -17,11 +19,13 @@ function App() {
         {/* Define your routes */}
         <Routes>
           <Route path="/" element={<Index />} />
+          <Route path="/getproduct/:id" element={<Viewcart />} />
           <Route path="/viewcart/:id" element={<Viewcart />} />
-          <Route path="/addtocart/:id" element={<Mycart />} />
+          <Route path="/addtocart/:id" element={<Addtocart />} />
           <Route path="/checkout/:id" element={<Checkout />} />
           <Route path="/login" element={<SignIn />} />
-          <Route  path="/register" element={<SignUp />} />
+          <Route path="/register" element={<SignUp />} />
+          <Route path="/buynow" element={<Buynow />} />
           {/* Add more routes as needed */}
         </Routes>
 

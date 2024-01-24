@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 function Navbar() {
   return (
-    <div className="flex flex-row justify-around items-center h-50 bg-white-400 relative mt-10">
+    <div className="flex flex-row justify-around items-center h-50 bg-white-400 relative mt-32">
       <div>Welcome to our Store!</div>
       <div className="flex flex-row gap-5 h-auto cursor-pointer  ">
         {/* <Demo />

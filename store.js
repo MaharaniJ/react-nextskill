@@ -2,7 +2,7 @@
 
 import { configureStore } from "@reduxjs/toolkit";
 
-import rootReducer from "./redux/reducers/combineReducer";
+import rootReducer from "./src/redux/reducers/combineReducer";
 
 const store = configureStore({
   reducer: rootReducer,
