@@ -3,18 +3,20 @@ import { useParams } from "react-router";
 import cart from "../data"; // Import your cart data
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
-import { useContext } from "react";
-import { LoginContext } from "../../context/ContextProvider";
 import axios from "axios";
 
 function Viewcart() {
-  const [getaData, setGetaData] = useState("");
+  // const [getaData, setGetaData] = useState("");
+  // console.log(getaData);
 
   const { id } = useParams("");
-  const { account, setAccount } = useContext(LoginContext);
+  // const { account, setAccount } = useContext(LoginContext);
 
   const [getdata, setGetdata] = useState([]);
+  console.log("getdata:", getdata.imagSrc);
 
+
+  // Inside getaproductdata function
   const getaproductdata = async () => {
     try {
       const res = await axios.get(`http://localhost:5000/getproduct/${id}`, {
@@ -22,31 +24,35 @@ function Viewcart() {
           "Content-Type": "application/json",
         },
       });
-      const data = res.data;
-      console.log(data);
-      if (res.status !== 201) {
-        alert("no data available");
-      } else {
+      if (res.status === 201) {
+        // Checking for successful response status
+        const data = res.data;
+        console.log(data);
         setGetdata(data);
+      } else {
+        console.log("No data available");
       }
     } catch (error) {
       console.log(error);
+      // Handle error, for example:
+      alert("Error fetching product data");
     }
   };
 
   useEffect(() => {
-    setTimeout(getaproductdata, 1000);
+    // setTimeout(getaproductdata, 1000);
+    getaproductdata();
   }, [id]);
 
-  useEffect(() => {
-    // Find the item in the cart data with the matching id
-    const selectedItem = cart.find((item) => item.cart_id === Number(id));
+  // useEffect(() => {
+  //   // Find the item in the cart data with the matching id
+  //   const selectedItem = cart.find((item) => item.cart_id === Number(id));
 
-    // If the item is found, update the state
-    if (selectedItem) {
-      setGetaData(selectedItem);
-    }
-  }, [id]);
+  //   // If the item is found, update the state
+  //   if (selectedItem) {
+  //     setGetaData(selectedItem);
+  //   }
+  // }, [id]);
 
   const [count, setCount] = useState(1);
 
@@ -62,22 +68,22 @@ function Viewcart() {
 
   return (
     <div className="cart_section">
-      {getaData && Object.keys(getaData).length && (
+      {getdata && Object.keys(getdata).length && (
         <div className="cart_container w-95 mx-auto flex p-10">
           <div className="left_cart flex-1 flex flex-col items-center justify-center">
-            <img className="w-1/2 mb-8" src={getaData.imagSrc} alt="" />
+            <img className="w-1/2 mb-8" src={getdata.imagSrc} alt="" />
           </div>
           <div className="right_cart flex-1 border border-gray-300 p-4 rounded mb-5">
-            <h3 className="font-semibold text-xl mb-4">{getaData.name}</h3>
+            <h3 className="font-semibold text-xl mb-4">{getdata.name}</h3>
 
             <hr className="mb-4" />
             <p className="text-[20px]">
-              M.R.P. : <del>₹{getaData.price}</del>
+              M.R.P. : <del>₹{getdata.price}</del>
             </p>
 
             <p className="description text-gray-700 mt-4 text-xl">
               <span className="font-semibold">
-                About the Item : <span>{getaData.description}</span>
+                About the Item : <span>{getdata.description}</span>
               </span>
             </p>
             <div className="cart_btn flex justify-start mt-8">
@@ -97,7 +103,7 @@ function Viewcart() {
                     +
                   </span>
                 </button>
-                <Link to={`/addtocart/${getaData.id}`}>
+                <Link to={`/addtocart/${getdata.id}`}>
                   <button className="cart_btn2 px-5 py-2 bg-orange-500 rounded-full text-gray-800 font-bold focus:outline-none shadow-md">
                     ADD TO CART
                   </button>
@@ -108,26 +114,26 @@ function Viewcart() {
               <p className="description gap-5">
                 <span>
                   Availability:
-                  <span>{getaData.availablity}</span>
+                  <span>{getdata.availablity}</span>
                 </span>
               </p>
               <p className="description">
                 <span>
                   SUK:
-                  <span>{getaData.sku}</span>
+                  <span>{getdata.sku}</span>
                 </span>
               </p>
               <p className="description">
                 <span>
                   Categories:
-                  <span>{getaData.categories}</span>
+                  <span>{getdata.categories}</span>
                 </span>
               </p>
             </div>
           </div>
         </div>
       )}
-      {!getaData && (
+      {!getdata && (
         <div className="circle flex items-center justify-center h-full">
           {/* <CircularProgress /> */}
           <h2 className="ml-2">Loading....</h2>

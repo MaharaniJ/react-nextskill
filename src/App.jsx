@@ -9,12 +9,15 @@ import SignIn from "./components/signin-up/SignIn";
 import SignUp from "./components/signin-up/SignUp";
 import Buynow from "./buynow/Buynow";
 import Addtocart from "./components/Cart-section/Addtocart";
+import Nav1 from "./components/Nav/Nav1";
+
 
 function App() {
   return (
     <>
       <div className="w-full">
-        {/* <Outlet /> */}
+      <Nav1 />
+        <Outlet />
 
         {/* Define your routes */}
         <Routes>
@@ -22,7 +25,7 @@ function App() {
           <Route path="/getproduct/:id" element={<Viewcart />} />
           <Route path="/viewcart/:id" element={<Viewcart />} />
           <Route path="/addtocart/:id" element={<Addtocart />} />
-          <Route path="/checkout/:id" element={<Checkout />} />
+          <Route path="/checkout" element={<Checkout />} />
           <Route path="/login" element={<SignIn />} />
           <Route path="/register" element={<SignUp />} />
           <Route path="/buynow" element={<Buynow />} />

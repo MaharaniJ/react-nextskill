@@ -1,49 +1,47 @@
 import { useContext } from "react";
 import axios from "axios";
 import { LoginContext } from "../context/ContextProvider";
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 
-
-function Option({ deleteData, get }) {
+function Option({ deleteData, getData }) {
   const { account, setAccount } = useContext(LoginContext);
+  console.log(getData);
+ 
 
   const token = window.localStorage.getItem("app-token");
 
   const removedata = async (id) => {
     if (window.confirm("Are you sure you want to delete this item?")) {
       try {
-        const response = await axios.get(
-          `http://localhost:5000/remove/${id}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        const response = await axios.get(`http://localhost:5000/remove/${id}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
         const data = await response.data;
 
         if (response.status === 200) {
           console.log("Item Deleted");
           setAccount(data);
-          get();
+          getData();
           alert("Item removed from cart 😃!");
+          window.location.reload();
         } else {
           console.log("Error in API");
         }
       } catch (error) {
-        console.log(error)
+        console.log(error);
       }
     }
   };
 
   Option.propTypes = {
     deleteData: PropTypes.number.isRequired,
-    get: PropTypes.func.isRequired,
+    getData: PropTypes.func.isRequired,
   };
-  
 
   return (
-    <div className="add_remove_select" key={deleteData}>
+    <div className="add_remove_select flex justify-evenly" key={deleteData}>
       <select className="p-2">
         {[1, 2, 3, 4].map((value) => (
           <option key={value} value={value}>

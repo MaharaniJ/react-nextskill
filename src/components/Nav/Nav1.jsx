@@ -42,15 +42,17 @@ function Nav1() {
   const [text, setText] = useState("");
   console.log(text);
   const [liOpen, setLiopen] = useState(true);
-
   const { account, setAccount } = useContext(LoginContext);
   console.log(account);
-  // console.log(account.fname);
+  //  console.log(account.firstname);
+  // account && Object.prototype.hasOwnProperty.call(account, "firstname")
 
-  if (account && account.hasOwnProperty("fname")) {
-    console.log(account.fname);
+  if (account.firstname) {
+    console.log("account", account.firstname);
   } else {
-    console.log("The 'fname' property does not exist in the account object.");
+    console.log(
+      "The 'firstname' property does not exist in the account object."
+    );
   }
 
   const [drawOpen, setDrawopen] = useState(false);
@@ -164,7 +166,7 @@ function Nav1() {
     setIsInputFocused(false);
   };
   return (
-    <header className="fixed bg-gray-800 text-white top-0 w-full z-10">
+    <header className="fixed bg-gray-700 text-white top-0 w-full z-10">
       <nav className="container mx-auto flex justify-between items-center py-2">
         <div className="left flex items-center flex-1">
           <IconButton className="visible md:invisible" onClick={handelopen}>
@@ -246,7 +248,7 @@ function Nav1() {
             </NavLink>
           )}
           {account ? (
-            account.fname ? (
+            account.firstname ? (
               <Avatar
                 className="avtar ml-2"
                 id="demo-positioned-button"
@@ -254,9 +256,9 @@ function Nav1() {
                 aria-haspopup="true"
                 aria-expanded={open ? "true" : undefined}
                 onClick={handleClick}
-                title={account.fname.toUpperCase()}
+                title={account.firstname.toUpperCase()}
               >
-                {account.fname[0].toUpperCase()}
+                {account.firstname[0].toUpperCase()}
               </Avatar>
             ) : (
               <Avatar
@@ -307,7 +309,6 @@ function Nav1() {
         </div>
       </nav>
     </header>
-    // ...
   );
 }
 export default Nav1;

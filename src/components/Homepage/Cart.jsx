@@ -10,7 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 function Cart() {
   const { carddatas } = useSelector((state) => state.getCardData);
   const dispatch = useDispatch();
-  console.log(carddatas);
+  console.log(carddatas.id);
 
   useEffect(() => {
     // console.log(getProducts)

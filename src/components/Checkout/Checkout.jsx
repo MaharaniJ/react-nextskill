@@ -1,12 +1,16 @@
 import axios from "axios";
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useContext, useState } from "react";
+import { Link, useParams } from "react-router-dom";
+import { LoginContext } from "../../context/ContextProvider";
 
 export default function Checkout() {
+  const {account} = useContext(LoginContext)
+  const userEmail = account? account.email :"";
+  const {id} = useParams()
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
-    email: "",
+    email: userEmail,
     companyName: "",
     country: "",
     streetAddress: "",
@@ -47,7 +51,7 @@ export default function Checkout() {
 
     try {
       const response = await axios.post(
-        "http://localhost:5000/checkout",
+        `http://localhost:5000/checkout/${id}`,
         formData,
         {
           headers: {
@@ -98,7 +102,7 @@ export default function Checkout() {
   return (
     <>
       <form
-        className="mx-20 flex flex-col justify-center items-center mt-4 bg-slate-200 p-8 shadow-lg rounded-lg"
+        className="mx-20 flex flex-col justify-center items-center mt-28 bg-slate-200 p-8 shadow-lg rounded-lg"
         onSubmit={handleSubmit}
       >
         <div className="space-y-12">
@@ -156,6 +160,7 @@ export default function Checkout() {
                   name="email"
                   type="email"
                   autoComplete="email"
+                  value={userEmail}
                   className="block w-full p-7 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   onChange={handleInputChange}
                 />

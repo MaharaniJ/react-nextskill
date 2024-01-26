@@ -79,7 +79,7 @@ function SignUp() {
 
   return (
     <form
-      className="mx-auto flex flex-col justify-center items-center mt-20 bg-slate-200 w-1/3 p-8 gap-5 shadow-lg rounded-md"
+      className="mx-auto flex flex-col justify-center items-center mt-32 bg-slate-200 w-1/3 p-8 gap-5 shadow-lg rounded-md"
       onSubmit={handleSubmit}
     >
       <h1 className="text-xl font-sm">Sign Up</h1>

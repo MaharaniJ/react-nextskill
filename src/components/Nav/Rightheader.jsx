@@ -18,17 +18,17 @@ function Rightheader({ drawClose, logoutuser }) {
   return (
     <div className="rightheader w-72 h-auto">
       <div className="right_nav flex items-center bg-blue-900 pb-2">
-        {account && account.fname ? (
+        {account && account.firstname ? (
           <Avatar className="cursor-pointer">
-            {account.fname[0].toUpperCase()}
+            {account.firstname[0].toUpperCase()}
           </Avatar>
         ) : (
           <Avatar className="bi bi-person-circle  cursor-pointer"></Avatar>
         )}
 
-        {account && account.fname ? (
+        {account && account.firstname ? (
           <h3 className="ml-2 mt-2 text-white font-italic font-semibold">
-            Helloo, {account.fname.toUpperCase()}
+            Helloo, {account.firstname.toUpperCase()}
           </h3>
         ) : (
           <h3 className="ml-2 mt-2 text-white font-italic font-semibold">
