@@ -5,12 +5,9 @@ import Addtocart from "../Cart-section/Addtocart";
 import { getProducts } from "../../redux/action/action";
 import { useDispatch, useSelector } from "react-redux";
 
-
-
 function Cart() {
   const { carddatas } = useSelector((state) => state.getCardData);
   const dispatch = useDispatch();
-  console.log(carddatas.id);
 
   useEffect(() => {
     // console.log(getProducts)
@@ -26,11 +23,10 @@ function Cart() {
     <div className="bg-white">
       <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
         <h2 className="sr-only">Products</h2>
-
         <div className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
           {carddatas.map((item) => (
             <div key={item.id} className="relative group">
-              <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-lg bg-gray-200 xl:aspect-h-8 xl:aspect-w-7">
+              <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-lg bg-slate-400 xl:aspect-h-8 xl:aspect-w-7">
                 <img
                   src={item.imagSrc}
                   alt={item.imageAlt}
@@ -66,7 +62,7 @@ function Cart() {
               </p>
 
               {/* Buttons at the top initially */}
-              <div className="absolute inset-0 gap-5 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+              <div className="absolute inset-0 sm:inset-y-0 gap-5 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                 <div className="transform group-hover:translate-y-10 transition-transform">
                   <button className="bg-slate-400 text-black px-4 py-2 rounded-full mx-2 ">
                     <Link to={`/viewcart/${item.id}`}> Quick View </Link>

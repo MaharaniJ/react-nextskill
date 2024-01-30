@@ -4,58 +4,40 @@ import { Link, useParams } from "react-router-dom";
 import { LoginContext } from "../../context/ContextProvider";
 
 export default function Checkout() {
-  const {account} = useContext(LoginContext)
-  const userEmail = account? account.email :"";
-  const {id} = useParams()
+  const { account } = useContext(LoginContext);
+  const userEmail = account ? account.email : "";
+  const { id } = useParams();
+  console.log(id)
   const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
+    firstname: "",
+    lastname: "",
     email: userEmail,
-    companyName: "",
+    companyname: "",
     country: "",
-    streetAddress: "",
+    streetaddress: "",
     region: "",
-    postalCode: "",
+    postalcode: "",
   });
-
-  const {
-    firstName,
-    lastName,
-    email,
-    companyName,
-    country,
-    streetAddress,
-    region,
-    postalCode,
-  } = formData;
-
-  if (
-    !firstName ||
-    !lastName ||
-    !email ||
-    !companyName ||
-    !country ||
-    !streetAddress ||
-    !region ||
-    !postalCode
-  ) {
-    console.log("Please Enter the required fields");
-  }
-
+  console.log(formData)
+  
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
+
+  const token = window.localStorage.getItem("app-token");
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    // setErrors(Validation(formData))
 
     try {
       const response = await axios.post(
-        `http://localhost:5000/checkout/${id}`,
+        `http://localhost:5000/checkout/65b3611799a9aafd515626d1`,
         formData,
         {
           headers: {
-            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
           },
         }
       );
@@ -121,11 +103,12 @@ export default function Checkout() {
               <div className="mt-2">
                 <input
                   id="first-name"
-                  name="firstName"
+                  name="firstname"
                   type="text"
                   autoComplete="first-name"
                   className="block w-full p-7 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   onChange={handleInputChange}
+                  required
                 />
               </div>
             </div>
@@ -139,11 +122,12 @@ export default function Checkout() {
               <div className="mt-2">
                 <input
                   id="last-name"
-                  name="lastName"
+                  name="lastname"
                   type="text"
                   autoComplete="last-name"
                   className="block w-full p-7 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   onChange={handleInputChange}
+                  required
                 />
               </div>
             </div>
@@ -163,6 +147,7 @@ export default function Checkout() {
                   value={userEmail}
                   className="block w-full p-7 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   onChange={handleInputChange}
+                  required
                 />
               </div>
             </div>
@@ -176,11 +161,12 @@ export default function Checkout() {
               <div className="mt-2">
                 <input
                   id="Company-name"
-                  name="companyName"
+                  name="companyname"
                   type="text"
                   autoComplete="Company-name"
                   className="block w-full p-7 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   onChange={handleInputChange}
+                  required
                 />
               </div>
             </div>
@@ -200,6 +186,7 @@ export default function Checkout() {
                     autoComplete="country-name"
                     className="block w-full p-7 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
                     onChange={handleInputChange}
+                    required
                   >
                     <option>United States</option>
                     <option>Canada</option>
@@ -219,11 +206,12 @@ export default function Checkout() {
                 <div className="mt-2">
                   <input
                     type="text"
-                    name="streetAddress"
+                    name="streetaddress"
                     id="street-address"
                     autoComplete="street-address"
                     className="block w-full p-7 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                     onChange={handleInputChange}
+                    required
                   />
                 </div>
               </div>
@@ -243,6 +231,7 @@ export default function Checkout() {
                     autoComplete="address-level2"
                     className="block w-full p-7 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                     onChange={handleInputChange}
+                    required
                   />
                 </div>
               </div>
@@ -262,6 +251,7 @@ export default function Checkout() {
                     autoComplete="address-level1"
                     className="block w-full p-7 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                     onChange={handleInputChange}
+                    required
                   />
                 </div>
               </div>
@@ -276,11 +266,12 @@ export default function Checkout() {
                 <div className="mt-2">
                   <input
                     type="text"
-                    name="postalCode"
+                    name="postalcode"
                     id="postal-code"
                     autoComplete="postal-code"
                     className="block w-full p-7 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                     onChange={handleInputChange}
+                    required
                   />
                 </div>
               </div>
@@ -295,13 +286,13 @@ export default function Checkout() {
           >
             Cancel
           </button>
-         <Link to="/buynow">
-         <button
-            type="submit"
-            className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-          >
-            Save
-          </button>
+          <Link to="/payment">
+            <button
+              type="submit"
+              className="rounded-md px-3 py-2 text-sm font-semibold shadow-sm hover:bg-indigo-500 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 "
+            >
+              Save
+            </button>
           </Link>
         </div>
       </form>

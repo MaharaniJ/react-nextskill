@@ -1,6 +1,4 @@
 import { useContext, useEffect, useState } from "react";
-
-// import logo from "../../assets/amazon.png";
 import { Search } from "@mui/icons-material";
 import ShoppingCart from "@mui/icons-material/ShoppingCart";
 import Badge from "@mui/material/Badge";
@@ -14,7 +12,7 @@ import Rightheader from "./Rightheader";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import Logout from "@mui/icons-material/Logout";
-import { ToastContainer } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useSelector } from "react-redux";
 
@@ -23,6 +21,20 @@ function Nav1() {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const [isInputFocused, setIsInputFocused] = useState(false);
+  const [drawOpen, setDrawopen] = useState(false);
+  const [text, setText] = useState("");
+  console.log(text);
+  const [liOpen, setLiopen] = useState(true);
+  const { account, setAccount } = useContext(LoginContext);
+  console.log("accountconsole:", account);
+
+  if (account && Object.prototype.hasOwnProperty.call("firstname")) {
+    console.log(account.firstname);
+  } else {
+    console.log(
+      "The 'firstname' property does not exist in the account object."
+    );
+  }
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -33,29 +45,9 @@ function Nav1() {
   const { carddatas } = useSelector((state) => state.getCardData);
   console.log(carddatas);
 
-  // const dispatch = useDispatch()
-
-  // useEffect(()=>{
-  //   dispatch(getProducts)
-  // },[dispatch])
-
-  const [text, setText] = useState("");
-  console.log(text);
-  const [liOpen, setLiopen] = useState(true);
-  const { account, setAccount } = useContext(LoginContext);
-  console.log(account);
-  //  console.log(account.firstname);
-  // account && Object.prototype.hasOwnProperty.call(account, "firstname")
-
-  if (account.firstname) {
-    console.log("account", account.firstname);
-  } else {
-    console.log(
-      "The 'firstname' property does not exist in the account object."
-    );
-  }
-
-  const [drawOpen, setDrawopen] = useState(false);
+  useEffect(() => {
+    getvaliduser();
+  }, []);
 
   const send = () => {
     if (account) {
@@ -71,25 +63,17 @@ function Nav1() {
           Authorization: `Bearer ${token}`,
         },
       });
-      const data = await response.data;
-      console.log(data);
-      if (response.status === 200) {
-        setAccount(data);
-        // Perform actions when user is valid (e.g., redirect or display a message)
+
+      if (response.status !== 200) {
+        console.log("Server responded with an error status:", response.status);
       } else {
-        // Handle other HTTP statuses (e.g., unauthorized, server error)
-        console.log(
-          "Server responded with an error:",
-          data.error || "Unknown error"
-        );
+        const data = response.data;
+        console.log("responsedata:", data);
       }
     } catch (error) {
       console.error("Error fetching user data:", error.message);
     }
   };
-  useEffect(() => {
-    getvaliduser();
-  }, []);
 
   const logoutuser = async () => {
     try {
@@ -110,33 +94,24 @@ function Nav1() {
         const data = await res.data;
         console.log(data);
 
-        //   if (!res.status === 200) {
-        //     const error = new Error(res.error);
-        //     throw error;
-        // } else {
-        //     setAccount(false);
-        //     setOpen(false)
-        //     toast.success("user Logout 😃!", {
-        //         position: "top-center"
-        //     });
-        //     navigate("/");
-        // }
-
         if (res.status !== 200 || !data) {
           console.log("Server responded with an error message");
         } else {
-          alert("successfully logged out");
+          toast.success("user Logout 😃!", {
+            position: "top-center",
+          });
 
           // Remove the token from local storage
           window.localStorage.removeItem("app-token");
 
           // Redirect to a new location using React Router's history
-          //  navigate("/");
+          navigate("/");
 
           // Set the account to false or perform any other necessary state updates
           setAccount(false);
         }
       } else {
+        setAccount(true);
         // User canceled the logout, do nothing or handle it as needed
       }
     } catch (error) {
@@ -168,7 +143,7 @@ function Nav1() {
   return (
     <header className="fixed bg-gray-700 text-white top-0 w-full z-10">
       <nav className="container mx-auto flex justify-between items-center py-2">
-        <div className="left flex items-center flex-1">
+        <div className="left flex items-center flex-1 gap-9">
           <IconButton className="visible md:invisible" onClick={handelopen}>
             <MenuIcon className="text-white" />
           </IconButton>
@@ -177,6 +152,7 @@ function Nav1() {
           </Drawer>
           <div className="navlogo">
             <NavLink to="/">
+              Home
               {/* <img alt="logo" src={logo} className="w-32" /> */}
             </NavLink>
           </div>
@@ -190,15 +166,21 @@ function Nav1() {
               onChange={(e) => getText(e.target.value)}
               onFocus={handleFocus}
               onBlur={handleBlur}
-              className="w-64 border-none outline-none rounded-l-md px-4 py-2 text-black"
+              className="w-64 border-none outline-none rounded-l-md px-4 py-2 text-black pl-6"
             />
             {!isInputFocused && (
-              <div className="search_icon rounded-r-md flex items-center justify-center cursor-pointer absolute">
-                <Search id="search" className="text-black" />
+              <div className="search_icon rounded-r-md flex items-center justify-center cursor-pointer absolute ">
+                <Search
+                  id="search"
+                  className="text-black cursor-pointer rounded-tr-3 rounded-br-3"
+                />
               </div>
             )}
             {text && (
-              <List className="items-center absolute p-2 bg-white text-black top-14 w-96">
+              <List
+                className="absolute bg-white text-black top-14 w-96"
+                hidden={liOpen}
+              >
                 {carddatas
                   .filter((product) =>
                     product.name.toLowerCase().includes(text.toLowerCase())
@@ -214,7 +196,7 @@ function Nav1() {
             )}
           </div>
         </div>
-        <div className="right flex items-center">
+        <div className="mr-6 flex items-center">
           <div className="nav_btn mr-2">
             <NavLink
               to="/login"
@@ -225,11 +207,8 @@ function Nav1() {
           </div>
           {account ? (
             <NavLink to="/buynow">
-              <div className="cart_btn flex items-center cursor-pointer">
-                <Badge
-                  badgeContent={account.carts ? account.carts.length : 0}
-                  color="secondary"
-                >
+              <div className="flex items-center ml-6 cursor-pointer mt-2 p-2 border border-solid border-gray-800 hover:border-white rounded">
+                <Badge badgeContent={account.carts ? account.carts.length : 0}>
                   <ShoppingCart color="white" />
                 </Badge>
                 <NavLink to="/buynow">
@@ -239,18 +218,25 @@ function Nav1() {
             </NavLink>
           ) : (
             <NavLink to="/login">
-              <div className="cart_btn flex items-center cursor-pointer">
+              <div className="flex items-center ml-6 cursor-pointer mt-2 p-2 border border-solid border-gray-800 hover:border-white rounded">
                 <Badge badgeContent={0} color="secondary">
                   <ShoppingCart />
                 </Badge>
-                <p className="text-white ml-1">Cart</p>
+                <p className="text-white font-medium text-base mt-3 mr-4">
+                  Cart
+                </p>
               </div>
             </NavLink>
           )}
           {account ? (
             account.firstname ? (
               <Avatar
-                className="avtar ml-2"
+                className="cursor-pointer ml-2 bg-blue-300"
+                style={{
+                  cursor: "pointer",
+                  marginLeft: "2",
+                  backgroundColor: "blue",
+                }}
                 id="demo-positioned-button"
                 aria-controls={open ? "demo-positioned-menu" : undefined}
                 aria-haspopup="true"

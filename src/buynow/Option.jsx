@@ -2,10 +2,11 @@ import { useContext } from "react";
 import axios from "axios";
 import { LoginContext } from "../context/ContextProvider";
 import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
 
 function Option({ deleteData, getData }) {
   const { account, setAccount } = useContext(LoginContext);
-  console.log(getData);
+
  
 
   const token = window.localStorage.getItem("app-token");
@@ -41,8 +42,8 @@ function Option({ deleteData, getData }) {
   };
 
   return (
-    <div className="add_remove_select flex justify-evenly" key={deleteData}>
-      <select className="p-2">
+    <div className="flex items-center justify-evenly mt-3 mb-4" key={deleteData}>
+      <select className="p-1 w-12 rounded-2xl bg-gray-100 leading-tight mt-2 outline-none border border-gray-300 shadow-md">
         {[1, 2, 3, 4].map((value) => (
           <option key={value} value={value}>
             {value}
@@ -56,10 +57,10 @@ function Option({ deleteData, getData }) {
       >
         Delete
       </p>
+      <span className="mx-2  sm:inline">|</span>
+      <p className="w-auto sm:inline">Save Or Later</p>
       <span className="mx-2">|</span>
-      <p className="forremovemedia">Save Or Later</p>
-      <span className="mx-2">|</span>
-      <p className="forremovemedia"> See More like this</p>
+      <Link to="/" className="hover:text-blue-300 w-auto"> See More like this</Link>
     </div>
   );
 }

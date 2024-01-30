@@ -57,7 +57,7 @@ function Addtocart() {
         }
       );
       const data1 = await response.data;
-      console.log(data1);
+      console.log("data1console:",data1);
       if (response.status === 200) {
         setAccount(data1);
         navigate("/buynow");

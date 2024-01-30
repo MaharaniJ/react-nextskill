@@ -67,7 +67,7 @@ function Viewcart() {
   };
 
   return (
-    <div className="cart_section">
+    <div className="cart_section mt-20">
       {getdata && Object.keys(getdata).length && (
         <div className="cart_container w-95 mx-auto flex p-10">
           <div className="left_cart flex-1 flex flex-col items-center justify-center">
@@ -106,6 +106,11 @@ function Viewcart() {
                 <Link to={`/addtocart/${getdata.id}`}>
                   <button className="cart_btn2 px-5 py-2 bg-orange-500 rounded-full text-gray-800 font-bold focus:outline-none shadow-md">
                     ADD TO CART
+                  </button>
+                </Link>
+                <Link to={`/checkout/${getdata.id}`}>
+                  <button className="cart_btn2 px-5 py-2 bg-orange-500 rounded-full text-gray-800 font-bold focus:outline-none shadow-md">
+                    Buynow
                   </button>
                 </Link>
               </div>

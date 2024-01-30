@@ -10,15 +10,27 @@ function Subtotal({ item }) {
     totalAmount();
   }, [item]);
 
+
   const totalAmount = () => {
-    let totalPrice = 0;
-    item.forEach((item) => {
-      if (item && item.price ) {
-        totalPrice += item.price;
+    let price = 0;
+    item.map((item) => {
+      console.log("Item price:", item.price);
+      const parsedPrice = parseFloat(item.price);
+      console.log("Parsed price:", parsedPrice);
+      if (!isNaN(parsedPrice)) {
+        price += parsedPrice;
       }
     });
-    setSubtotal(totalPrice);
+    setSubtotal(price);
   };
+  
+
+  
+  
+  
+
+ 
+  
   
   Subtotal.propTypes = {
     item: PropTypes.array.isRequired,

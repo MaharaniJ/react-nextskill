@@ -12,6 +12,9 @@ function SignUp() {
     cpassword: "",
   });
 
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
   const navigate = useNavigate();
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -21,6 +24,13 @@ function SignUp() {
         [name]: value,
       };
     });
+  };
+
+
+  const toggleShowConfirmPassword = () => {
+    setShowConfirmPassword(
+      (prevShowConfirmPassword) => !prevShowConfirmPassword
+    );
   };
 
   const handleSubmit = async (e) => {
@@ -37,17 +47,17 @@ function SignUp() {
     });
 
     try {
-      const response = await axios.post("http://localhost:5000/register", {
-        firstname,
-        lastname,
-        email,
-        password,
-        cpassword,
-      });
+      const response = await axios.post("http://localhost:5000/register", 
+        Signupinput
+      );
 
       const data = response.data;
-
-      if (response.status === 200) {
+      console.log(data)
+      if (response.status === 422 || !data) {
+        toast.error("Invalid Details 👎!", {
+          position: "top-right",
+        });
+      } else {
         // Successful registration
         setSignupinput({
           ...Signupinput,
@@ -63,11 +73,6 @@ function SignUp() {
         setTimeout(() => {
           navigate("/"); // Navigate to the main page
         }, 1000);
-      } else {
-        // Handle other HTTP statuses (422, etc.)
-        toast.error(data.error || "Registration failed. Please try again.", {
-          position: "top-right",
-        });
       }
     } catch (error) {
       console.error("Error sending data:", error);
@@ -77,6 +82,9 @@ function SignUp() {
     }
   };
 
+  const togglePasswordVisibility = () => {
+    setShowPassword((prev) => !prev);
+  };
   return (
     <form
       className="mx-auto flex flex-col justify-center items-center mt-32 bg-slate-200 w-1/3 p-8 gap-5 shadow-lg rounded-md"
@@ -147,19 +155,25 @@ function SignUp() {
         >
           Password
         </label>
-        <div className="mt-2">
+        <div className="mt-2 relative">
           <input
             id="password"
             name="password"
             value={Signupinput.password}
             onChange={handleChange}
-            type="password"
+            type={showPassword ? "text" : "password"}
             autoComplete="password"
             className="block w-full  px-4 rounded-md border-0 py-4 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
           />
+          <span
+              className="absolute top-1/2 right-4 transform -translate-y-1/2 cursor-pointer  bg-slate-400 p-2 rounded-md"
+              onClick={togglePasswordVisibility}
+            >
+              {showPassword ? "Hide" : "Show"}
+            </span>
         </div>
       </div>
-      <div className="w-full">
+      <div className="w-full relative">
         <label
           htmlFor="cpassword"
           className="block text-lg font-medium leading-6 text-gray-900"
@@ -172,10 +186,16 @@ function SignUp() {
             name="cpassword"
             value={Signupinput.cpassword}
             onChange={handleChange}
-            type="password"
+            type={showConfirmPassword ? "text" : "password"}
             autoComplete="cpassword"
             className="block w-full  px-4 rounded-md border-0 py-4 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
           />
+           <span
+                 className="absolute top-1/2 right-4 transform -translate-y-1/2 cursor-pointer mt-4 bg-slate-400 p-2 rounded-md"
+                 onClick={toggleShowConfirmPassword}
+            >
+              {showConfirmPassword ? "Hide" : "Show"}
+            </span>
         </div>
       </div>
       <button className="bg-blue-400 rounded-md p-3 text-xl">Submit</button>
