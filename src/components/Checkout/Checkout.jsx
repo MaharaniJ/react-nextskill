@@ -2,12 +2,12 @@ import axios from "axios";
 import { useContext, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { LoginContext } from "../../context/ContextProvider";
+import { toast } from "react-toastify";
 
 export default function Checkout() {
   const { account } = useContext(LoginContext);
   const userEmail = account ? account.email : "";
-  const { id } = useParams();
-  console.log(id)
+
   const [formData, setFormData] = useState({
     firstname: "",
     lastname: "",
@@ -18,14 +18,15 @@ export default function Checkout() {
     region: "",
     postalcode: "",
   });
-  console.log(formData)
-  
+  console.log(formData);
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
 
   const token = window.localStorage.getItem("app-token");
+  console.log(token)
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -33,7 +34,7 @@ export default function Checkout() {
 
     try {
       const response = await axios.post(
-        `http://localhost:5000/checkout/65b3611799a9aafd515626d1`,
+        "http://localhost:5000/checkout",
         formData,
         {
           headers: {
@@ -42,8 +43,13 @@ export default function Checkout() {
         }
       );
 
-      if (response.status === 200) {
-        // Clear the form data
+      const data = response.data;
+      console.log(data);
+      if (response.status !== 404) {
+        toast.success("Form data saved successfully", {
+          position: "top-right",
+        });
+        console.log("Form data saved successfully");
         setFormData({
           ...formData,
           firstName: "",
@@ -56,9 +62,15 @@ export default function Checkout() {
           region: "",
           postalCode: "",
         });
-        console.log("Form data saved successfully");
+
+        
+        // Clear the form data
+
         // Exit editing mode
       } else {
+        toast.error("Failed to save form data", {
+          position: "top-center",
+        });
         console.error("Failed to save form data");
       }
     } catch (error) {

@@ -47,7 +47,7 @@ function Right({ item }) {
         Subtotal ({item.length} items):{" "}
         <span className="font-semibold">₹{subtotal}.00</span>
       </h3>
-      <Link to={`/checkout/${item.id}`}>
+      <Link to="/checkout">
         <button className="w-full bg-yellow-500 text-white py-2 rounded-md mt-4">
           Process to Buy
         </button>

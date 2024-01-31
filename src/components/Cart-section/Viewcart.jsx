@@ -108,7 +108,7 @@ function Viewcart() {
                     ADD TO CART
                   </button>
                 </Link>
-                <Link to={`/checkout/${getdata.id}`}>
+                <Link to="/checkout">
                   <button className="cart_btn2 px-5 py-2 bg-orange-500 rounded-full text-gray-800 font-bold focus:outline-none shadow-md">
                     Buynow
                   </button>

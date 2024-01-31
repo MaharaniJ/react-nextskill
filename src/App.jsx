@@ -26,7 +26,7 @@ function App() {
           <Route path="/getproduct/:id" element={<Viewcart />} />
           <Route path="/viewcart/:id" element={<Viewcart />} />
           <Route path="/addtocart/:id" element={<Addtocart />} />
-          <Route path="/checkout/:id" element={<Checkout />} />
+          <Route path="/checkout" element={<Checkout />} />
           <Route path="/login" element={<SignIn />} />
           <Route path="/register" element={<SignUp />} />
           <Route path="/buynow" element={<Buynow />} />
